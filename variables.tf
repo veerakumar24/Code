@@ -18,3 +18,9 @@ variable "instance_type" {
   default = "t2.micro"
 }
 
+variable "github_oauth_token" {
+  description = "GitHub Personal Access Token for authenticating with the repository"
+  type        = string
+  sensitive   = true
+}
+
