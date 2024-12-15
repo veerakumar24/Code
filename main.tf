@@ -221,3 +221,39 @@ resource "local_file" "ec2_key_pem" {
   content  = tls_private_key.ec2_key.private_key_pem
   file_permission = "0400" # Optional: Restrict permissions to the file
 }
+
+#Amplify
+resource "aws_amplify_app" "my_amplify_app" {
+  name          = "my-amplify-app"
+  repository    = "https://github.com/veerakumar24/WeAlvin-Devlopment" 
+  #branch        = "main" # Specify the branch to deploy
+  oauth_token   = var.github_oauth_token # GitHub Personal Access Token as a variable
+
+  build_spec = <<BUILD_SPEC
+version: 1
+frontend:
+  phases:
+    build:
+      commands:
+        - cd frontend
+        - npm install
+        - npm run build
+  artifacts:
+    baseDirectory: frontend/build
+    files:
+      - "**/*"
+  cache:
+    paths:
+      - frontend/node_modules/**/*
+BUILD_SPEC
+
+  environment_variables = {
+    NODE_ENV = "production"
+  }
+}
+
+resource "aws_amplify_branch" "main" {
+  app_id = aws_amplify_app.my_amplify_app.id
+  branch_name = "main"
+  enable_auto_build = true
+}
