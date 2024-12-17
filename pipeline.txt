@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Set AWS credentials (replace with your actual AWS keys or configure via environment variables)
+export AWS_ACCESS_KEY_ID=""
+export AWS_SECRET_ACCESS_KEY=""
+export AWS_DEFAULT_REGION="us-east-1"  # Set to your AWS region
+
+# Clone the repository (replace with your repository URL)
+echo "Cloning repository..."
+git clone https://github.com/veerakumar24/WeAlvin-Devlopment.git
+cd your-react-app
+
+# Install npm dependencies
+echo "Installing dependencies..."
+npm install
+
+# Build the React app
+echo "Building the React app..."
+npm run build
+
+# Deploy to AWS Amplify
+echo "Configuring Amplify..."
+amplify configure
+
+echo "Pushing changes to Amplify..."
+amplify push --yes
+
+echo "Publishing to Amplify..."
+amplify publish --yes
+
+# Clean up build files
+echo "Cleaning up build files..."
+rm -rf build/
+
+echo "Deployment process completed!"
